@@ -1,4 +1,4 @@
-# Abstract Factory Pattern - Java Example Analysis
+# Abstract Factory Pattern - Java Example
 
 ## 1. Introduction
 
