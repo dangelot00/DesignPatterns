@@ -1,21 +1,40 @@
 package org.abstract_factory;
 
+import org.abstract_factory.app.Application;
+import org.abstract_factory.factories.impl.MacOSFactory;
+import org.abstract_factory.factories.impl.WindowsFactory;
+import org.abstract_factory.factories.interfaces.GUIFactory;
 
 /**
- * The Abstract Factory Pattern
- * <p>
- * Abstract Factory defines an interface for creating all distinct products but leaves the actual product
- * creation to concrete factory classes. Each factory type corresponds to a certain product variety. <br><br>
- * The client code calls the creation methods of a factory object instead of creating products directly
- * with a constructor call (new operator). Since a factory corresponds to a single product variant, all
- * its products will be compatible. <br><br>
- * Client code works with factories and products only through their abstract interfaces.
- * This lets the client code work with any product variants, created by the factory object.
- * You just create a new concrete factory class and pass it to the client code. <br><br>
- * </p>
- **/
-public class Demo {
+ * The Demo class.
+ */
+public final class Demo {
+
+  private Demo() {
+    super();
+  }
+
+  /**
+   * Application picks the factory type and creates it at run time (during initialization),
+   * depending on the configuration or environment variables.
+   */
+  private static Application configureApplication() {
+    final GUIFactory guiFactory = createFactory();
+    return new Application(guiFactory);
+  }
+
+  private static GUIFactory createFactory() {
+    final String osName = System.getProperty("os.name").toLowerCase();
+
+    if (osName.contains("mac")) {
+      return new MacOSFactory();
+    } else {
+      return new WindowsFactory();
+    }
+  }
+
   public static void main(String[] args) {
-    System.out.println("Hello world!");
+    final Application app = configureApplication();
+    app.interact();
   }
 }
