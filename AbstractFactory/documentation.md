@@ -19,7 +19,7 @@ This approach has several drawbacks:
 
 The Abstract Factory pattern solves this by introducing layers of abstraction:
 
-1.  **Abstract Product Interfaces:** Define interfaces for each distinct type of product (e.g., `Button`, `Checkbox`). These interfaces declare the common operations the products must perform (e.g., `paint()`).
+1.  **Abstract Product Interfaces:** Define interfaces for each distinct type of product (e.g., `Button`, `Checkbox`). These interfaces declare the common operations the products must perform (e.g., `click()/toggle()`).
 2.  **Concrete Product Classes:** Implement the Abstract Product interfaces for each specific variant (e.g., `WindowsButton`, `MacOSButton`, `WindowsCheckbox`, `MacOSCheckbox`). Each concrete product provides the specific implementation for its variant (e.g., rendering a Windows-style button).
 3.  **Abstract Factory Interface:** Declares a set of methods for creating *each* type of abstract product (e.g., `createButton()`, `createCheckbox()`). The return types of these methods are the *Abstract Product* interfaces.
 4.  **Concrete Factory Classes:** Implement the Abstract Factory interface for each product family (e.g., `WindowsFactory`, `MacOSFactory`). Each concrete factory implements the creation methods to instantiate and return the corresponding *Concrete Products* for that family (e.g., `WindowsFactory.createButton()` returns a `WindowsButton`).
@@ -30,8 +30,8 @@ The Abstract Factory pattern solves this by introducing layers of abstraction:
 ### Components:
 
 *   **Abstract Products:**
-    *   `buttons/Button.java`: Interface defining the `paint()` method for all buttons.
-    *   `checkboxes/Checkbox.java`: Interface defining the `paint()` method for all checkboxes.
+    *   `buttons/Button.java`: Interface defining the `click()` method for all buttons.
+    *   `checkboxes/Checkbox.java`: Interface defining the `toggle()` method for all checkboxes.
 *   **Concrete Products:**
     *   `buttons/WindowsButton.java`: Implements `Button` for Windows look-and-feel.
     *   `buttons/MacOSButton.java`: Implements `Button` for macOS look-and-feel.
@@ -43,9 +43,9 @@ The Abstract Factory pattern solves this by introducing layers of abstraction:
     *   `factories/WindowsFactory.java`: Implements `GUIFactory`. `createButton()` returns `WindowsButton`, `createCheckbox()` returns `WindowsCheckbox`.
     *   `factories/MacOSFactory.java`: Implements `GUIFactory`. `createButton()` returns `MacOSButton`, `createCheckbox()` returns `MacOSCheckbox`.
 *   **Client:**
-    *   `Application.java`: Contains the business logic. It takes a `GUIFactory` in its constructor. It uses the factory to create `Button` and `Checkbox` objects and calls their `paint()` methods. The `Application` class doesn't know *which* concrete factory or products it's using; it only interacts with the interfaces.
+    *   `Application.java`: Contains the business logic. It takes a `GUIFactory` in its constructor. It uses the factory to create `Button` and `Checkbox` objects and calls their `click()/toggle()` methods. The `Application` class doesn't know *which* concrete factory or products it's using; it only interacts with the interfaces.
 *   **Configuration/Setup:**
-    *   `Demo.java`: The entry point. It determines the desired OS (simulated via configuration or system properties), creates the *corresponding* concrete factory (`WindowsFactory` or `MacOSFactory`), injects this factory into a new `Application` instance, and then runs the application's logic (`paint()` method).
+    *   `Demo.java`: The entry point. It determines the desired OS (simulated via configuration or system properties), creates the *corresponding* concrete factory (`WindowsFactory` or `MacOSFactory`), injects this factory into a new `Application` instance, and then runs the application's logic (`click()/toggle()` method).
 
 ## 5. Class Diagram (Mermaid)
 
@@ -61,9 +61,8 @@ classDiagram
        -factory GUIFactory
        -button Button
        -checkbox Checkbox
-       +Application(GUIFactory factory)
-       +createUI() void %% Method that uses the factory
-       +paintUI() void %% Method that uses the products
+       +Application(GUIFactory factory) - Creates UI
+       +interact() - Uses UI
     }
 
     %% -- Abstract Layer --
@@ -77,12 +76,12 @@ classDiagram
     class Button {
         <<Interface>>
         #Abstract Product
-        +paint() void
+        +click() void
     }
     class Checkbox {
         <<Interface>>
         #Abstract Product
-        +paint() void
+        +toggle() void
     }
 
     %% -- Concrete Factories (Product Families) --
@@ -101,21 +100,21 @@ classDiagram
     %% -- Concrete Products (Windows Family) --
     class WindowsButton {
         #Concrete Product [Windows]
-        +paint() void
+        +click() void
     }
     class WindowsCheckbox {
         #Concrete Product [Windows]
-        +paint() void
+        +toggle() void
     }
 
     %% -- Concrete Products (macOS Family) --
     class MacOSButton {
         #Concrete Product [macOS]
-        +paint() void
+        +click() void
     }
     class MacOSCheckbox {
         #Concrete Product [macOS]
-        +paint() void
+        +toggle() void
     }
 
 
@@ -152,7 +151,7 @@ classDiagram
 3.  **Client Instantiation (`Demo.java`)**: `Demo` creates an instance of the `Application` class, passing the chosen concrete factory (typed as the `GUIFactory` interface) to its constructor.
 4.  **Product Creation (`Application.java`)**: When the `Application` needs UI elements (e.g., in its constructor or a method like `createUI`), it calls the creation methods (`createButton()`, `createCheckbox()`) on the `GUIFactory` instance it holds.
 5.  **Concrete Product Return**: The concrete factory (`WindowsFactory` or `MacOSFactory`) receives the call and instantiates the corresponding concrete products (`WindowsButton`/`WindowsCheckbox` or `MacOSButton`/`MacOSCheckbox`). These products are returned to the `Application`, typed as their respective interfaces (`Button`, `Checkbox`).
-6.  **Product Usage (`Application.java`)**: The `Application` now holds references to the abstract products (`Button`, `Checkbox`) and can use them (e.g., call `button.paint()`, `checkbox.paint()`). The actual behavior (Windows or macOS style painting) depends on the concrete products created by the factory chosen in step 2, but the `Application` code itself remains unchanged regardless of the OS family.
+6.  **Product Usage (`Application.java`)**: The `Application` now holds references to the abstract products (`Button`, `Checkbox`) and can use them (e.g., call `button.click()`, `checkbox.toggle()`). The actual behavior (Windows or macOS) depends on the concrete products created by the factory chosen in step 2, but the `Application` code itself remains unchanged regardless of the OS family.
 
 ## 7. Benefits
 
