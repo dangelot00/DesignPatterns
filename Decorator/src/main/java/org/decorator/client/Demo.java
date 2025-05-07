@@ -8,7 +8,7 @@ import org.decorator.decorators.FileDataSource;
 public class Demo {
     public static void main(String[] args) {
         String salaryRecords = "Name,Salary\nJohn Smith,100000\nSteven Jobs,912000";
-        String outputFilePath = "OutputDemo.txt";
+        String outputFilePath = ".\\Decorator\\OutputDemo.txt";
 
         DataSource plainSource = new FileDataSource(outputFilePath);
         System.out.println("--- Writing plain data to " + outputFilePath + " ---");
