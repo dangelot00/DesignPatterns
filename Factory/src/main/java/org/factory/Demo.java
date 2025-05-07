@@ -1,4 +1,4 @@
-package org.factory.demo;
+package org.factory;
 
 import org.factory.factory.Dialog;
 import org.factory.factory.HtmlDialog;
@@ -7,10 +7,14 @@ import org.factory.factory.WindowsDialog;
 /**
  * The Demo class.
  */
-public class Demo {
+public final class Demo {
     private static Dialog dialog;
 
-    public static void main(String[] args) {
+  private Demo() {
+    super();
+  }
+
+  public static void main(String[] args) {
         configure();
         runBusinessLogic();
     }
@@ -28,7 +32,7 @@ public class Demo {
     }
 
     /**
-     * All of the client code should work with factories and products through
+     * All the client code should work with factories and products through
      * abstract interfaces. This way it does not care which factory it works
      * with and what kind of product it returns.
      */

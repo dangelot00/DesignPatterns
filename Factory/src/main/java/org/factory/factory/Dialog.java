@@ -10,7 +10,7 @@ import org.factory.button.Button;
 public abstract class Dialog {
 
     public void renderWindow() {
-        Button okButton = createButton();
+        final Button okButton = createButton();
         okButton.render();
     }
 
