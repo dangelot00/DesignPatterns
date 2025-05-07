@@ -13,8 +13,8 @@ import org.abstract_factory.factories.interfaces.GUIFactory;
  *
  */
 public class Application {
-  private Button button;
-  private Checkbox checkbox;
+  private final Button button;
+  private final Checkbox checkbox;
 
   public Application(GUIFactory factory) {
     super();
