@@ -1,8 +1,8 @@
 package org.builder.builders.impl;
 
 import org.builder.builders.interfaces.Builder;
-import org.builder.cars.Manual;
 import org.builder.cars.CarType;
+import org.builder.cars.Manual;
 import org.builder.components.Engine;
 import org.builder.components.GPSNavigator;
 import org.builder.components.Transmission;
@@ -11,12 +11,12 @@ import org.builder.components.TripComputer;
 /**
  * Unlike other creational patterns, Builder can construct unrelated products,
  * which don't have the common interface.
- *
+ * <p>
  * In this case we build a user manual for a car, using the same steps as we
  * built a car. This allows to produce manuals for specific car models,
  * configured with different features.
  */
-public class CarManualBuilder implements Builder{
+public class CarManualBuilder implements Builder {
   private CarType type;
   private int seats;
   private Engine engine;

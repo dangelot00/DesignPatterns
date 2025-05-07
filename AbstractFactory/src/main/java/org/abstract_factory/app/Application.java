@@ -10,7 +10,6 @@ import org.abstract_factory.factories.interfaces.GUIFactory;
  * <p>Users interact with abstract factories.<br>
  * They just want to have buttons and checkboxes and interact with them.<br>
  * They can be unaware on the actual concrete factory that they are using.</p>
- *
  */
 public class Application {
   private final Button button;

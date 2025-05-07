@@ -3,6 +3,7 @@ package org.proxy.lib;
 import java.util.HashMap;
 
 public interface ThirdPartyYouTubeLib {
-    HashMap<String, Video> popularVideos();
-    Video getVideo(String videoId);
+  HashMap<String, Video> popularVideos();
+
+  Video getVideo(String videoId);
 } 

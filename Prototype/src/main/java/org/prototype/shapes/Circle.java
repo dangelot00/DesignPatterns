@@ -1,28 +1,29 @@
 package org.prototype.shapes;
 
 public class Circle extends Shape {
-    public int radius;
+  public int radius;
 
-    public Circle() {
-      super();
-    }
+  public Circle() {
+    super();
+  }
 
-    public Circle(Circle target) {
-      super(target);
-      if (target != null) {
-          this.radius = target.radius;
-      }
+  public Circle(Circle target) {
+    super(target);
+    if (target != null) {
+      this.radius = target.radius;
     }
+  }
 
-    @Override
-    public Shape clone() {
-        return new Circle(this);
-    }
+  @Override
+  public Shape clone() {
+    return new Circle(this);
+  }
 
-    @Override
-    public boolean equals(Object object2) {
-      if (!(object2 instanceof Circle) || !super.equals(object2)) return false;
-      final Circle shape2 = (Circle) object2;
-      return shape2.radius == radius;
+  @Override
+  public boolean equals(Object object2) {
+    if (!(object2 instanceof final Circle shape2) || !super.equals(object2)) {
+      return false;
     }
+    return shape2.radius == radius;
+  }
 }

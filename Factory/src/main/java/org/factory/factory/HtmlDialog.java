@@ -8,8 +8,8 @@ import org.factory.button.HtmlButton;
  */
 public class HtmlDialog extends Dialog {
 
-    @Override
-    public Button createButton() {
-        return new HtmlButton();
-    }
+  @Override
+  public Button createButton() {
+    return new HtmlButton();
+  }
 } 

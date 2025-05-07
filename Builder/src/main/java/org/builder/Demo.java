@@ -29,5 +29,4 @@ public final class Demo {
     final Manual carManual = manualBuilder.getResult();
     System.out.println("\nCar manual built:\n" + carManual.print());
   }
-
 }

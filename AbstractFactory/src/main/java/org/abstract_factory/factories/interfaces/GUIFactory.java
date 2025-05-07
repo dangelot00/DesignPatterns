@@ -12,5 +12,6 @@ import org.abstract_factory.checkboxes.interfaces.Checkbox;
 public interface GUIFactory {
 
   Button createButton();
+
   Checkbox createCheckbox();
 }

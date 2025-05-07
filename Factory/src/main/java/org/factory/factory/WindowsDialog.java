@@ -8,8 +8,8 @@ import org.factory.button.WindowsButton;
  */
 public class WindowsDialog extends Dialog {
 
-    @Override
-    public Button createButton() {
-        return new WindowsButton();
-    }
+  @Override
+  public Button createButton() {
+    return new WindowsButton();
+  }
 } 

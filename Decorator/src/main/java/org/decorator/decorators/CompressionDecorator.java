@@ -10,80 +10,80 @@ import java.util.zip.DeflaterOutputStream;
 import java.util.zip.InflaterInputStream;
 
 public class CompressionDecorator extends DataSourceDecorator {
-    private int compLevel = Deflater.DEFAULT_COMPRESSION;
+  private int compLevel = Deflater.DEFAULT_COMPRESSION;
 
-    public CompressionDecorator(DataSource source) {
-        super(source);
+  public CompressionDecorator(DataSource source) {
+    super(source);
+  }
+
+  public int getCompressionLevel() {
+    return compLevel;
+  }
+
+  public void setCompressionLevel(int value) {
+    if (value >= Deflater.NO_COMPRESSION && value <= Deflater.BEST_COMPRESSION) {
+      this.compLevel = value;
+    } else if (value == Deflater.DEFAULT_COMPRESSION) {
+      this.compLevel = value;
+    } else {
+      System.out.println("Warning: Invalid compression level " + value + ". Using default.");
+      this.compLevel = Deflater.DEFAULT_COMPRESSION;
+    }
+  }
+
+  @Override
+  public void writeData(String data) {
+    super.writeData(compress(data));
+  }
+
+  @Override
+  public String readData() {
+    return decompress(super.readData());
+  }
+
+  private String compress(String stringData) {
+    if (stringData == null || stringData.isEmpty()) {
+      return "";
+    }
+    final byte[] data = stringData.getBytes();
+    try {
+      final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
+      final DeflaterOutputStream dos = new DeflaterOutputStream(bout, new Deflater(compLevel));
+      dos.write(data);
+      dos.close();
+      return Base64.getEncoder().encodeToString(bout.toByteArray());
+    } catch (IOException ex) {
+      System.out.println("Error during compression: " + ex.getMessage());
+      return "";
+    }
+  }
+
+  private String decompress(String stringData) {
+    if (stringData == null || stringData.isEmpty()) {
+      return "";
+    }
+    byte[] data;
+    try {
+      data = Base64.getDecoder().decode(stringData);
+    } catch (IllegalArgumentException e) {
+      System.out.println("Error decoding Base64 string for decompression: " + e.getMessage());
+      return "";
     }
 
-    public int getCompressionLevel() {
-        return compLevel;
+    try {
+      final InputStream in = new ByteArrayInputStream(data);
+      final InflaterInputStream iin = new InflaterInputStream(in);
+      final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
+      int b;
+      while ((b = iin.read()) != -1) {
+        bout.write(b);
+      }
+      iin.close();
+      in.close();
+      return bout.toString();
+    } catch (IOException ex) {
+      System.out.println("Error during decompression: " + ex.getMessage());
+      return "";
     }
-
-    public void setCompressionLevel(int value) {
-        if (value >= Deflater.NO_COMPRESSION && value <= Deflater.BEST_COMPRESSION) {
-            this.compLevel = value;
-        } else if (value == Deflater.DEFAULT_COMPRESSION) {
-            this.compLevel = value;
-        } else {
-            System.out.println("Warning: Invalid compression level " + value + ". Using default.");
-            this.compLevel = Deflater.DEFAULT_COMPRESSION;
-        }
-    }
-
-    @Override
-    public void writeData(String data) {
-        super.writeData(compress(data));
-    }
-
-    @Override
-    public String readData() {
-        return decompress(super.readData());
-    }
-
-    private String compress(String stringData) {
-        if (stringData == null || stringData.isEmpty()) {
-            return "";
-        }
-        final byte[] data = stringData.getBytes();
-        try {
-            final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
-            final DeflaterOutputStream dos = new DeflaterOutputStream(bout, new Deflater(compLevel));
-            dos.write(data);
-            dos.close();
-            return Base64.getEncoder().encodeToString(bout.toByteArray());
-        } catch (IOException ex) {
-            System.out.println("Error during compression: " + ex.getMessage());
-            return "";
-        }
-    }
-
-    private String decompress(String stringData) {
-        if (stringData == null || stringData.isEmpty()) {
-            return "";
-        }
-        byte[] data;
-        try {
-            data = Base64.getDecoder().decode(stringData);
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error decoding Base64 string for decompression: " + e.getMessage());
-            return "";
-        }
-        
-        try {
-            final InputStream in = new ByteArrayInputStream(data);
-            final InflaterInputStream iin = new InflaterInputStream(in);
-            final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
-            int b;
-            while ((b = iin.read()) != -1) {
-                bout.write(b);
-            }
-            iin.close();
-            in.close(); 
-            return bout.toString();
-        } catch (IOException ex) {
-            System.out.println("Error during decompression: " + ex.getMessage());
-            return "";
-        }
-    }
+  }
 } 
