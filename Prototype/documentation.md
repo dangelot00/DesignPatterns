@@ -151,4 +151,4 @@ classDiagram
 
 ## 9. Conclusion
 
-The Prototype pattern, as demonstrated by the Refactoring.Guru example, offers an effective way to create objects by copying existing instances. It is particularly advantageous when object creation is costly, when there are many similar objects with slight variations, or when the system needs to be flexible in how objects are created and configured. By using a registry of prototypes, it also allows for decoupling the client from concrete class instantiations. Careful consideration of shallow versus deep copying is crucial when implementing the `clone` operation for complex objects.
+The Prototype pattern offers an effective way to create objects by copying existing instances. It is particularly advantageous when object creation is costly, when there are many similar objects with slight variations, or when the system needs to be flexible in how objects are created and configured. By using a registry of prototypes, it also allows for decoupling the client from concrete class instantiations. Careful consideration of shallow versus deep copying is crucial when implementing the `clone` operation for complex objects.

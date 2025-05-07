@@ -1,22 +1,26 @@
-package org.proxy.client;
+package org.proxy;
 
 import org.proxy.downloader.YouTubeDownloader;
 import org.proxy.lib.ThirdPartyYouTubeClass;
 import org.proxy.proxy.YouTubeCacheProxy;
 
-public class Demo {
+public final class Demo {
+
+  private Demo() {
+    super();
+  }
 
   public static void main(String[] args) {
     System.out.println("### Testing Naive Downloader (No Proxy) ###");
-    YouTubeDownloader naiveDownloader = new YouTubeDownloader(new ThirdPartyYouTubeClass());
-    long naiveTime = test(naiveDownloader);
+    final YouTubeDownloader naiveDownloader = new YouTubeDownloader(new ThirdPartyYouTubeClass());
+    final long naiveTime = test(naiveDownloader);
     System.out.println("Naive Downloader finished in: " + naiveTime + "ms");
     System.out.println("=========================================\n");
 
     System.out.println("### Testing Smart Downloader (With Proxy) ###");
-    YouTubeCacheProxy cacheProxy = new YouTubeCacheProxy();
-    YouTubeDownloader smartDownloader = new YouTubeDownloader(cacheProxy);
-    long smartTime = test(smartDownloader);
+    final YouTubeCacheProxy cacheProxy = new YouTubeCacheProxy();
+    final YouTubeDownloader smartDownloader = new YouTubeDownloader(cacheProxy);
+    final long smartTime = test(smartDownloader);
     System.out.println("Smart Downloader finished in: " + smartTime + "ms");
     System.out.println("=========================================\n");
 
@@ -24,7 +28,7 @@ public class Demo {
   }
 
   private static long test(YouTubeDownloader downloader) {
-    long startTime = System.currentTimeMillis();
+    final long startTime = System.currentTimeMillis();
 
     System.out.println("--> Requesting popular videos...");
     downloader.renderPopularVideos();
@@ -44,8 +48,8 @@ public class Demo {
     System.out.println("--> Requesting video page 'someothervid'...");
     downloader.renderVideoPage("someothervid");
 
-    long estimatedTime = System.currentTimeMillis() - startTime;
+    final long estimatedTime = System.currentTimeMillis() - startTime;
     System.out.print("\nTest completed. ");
     return estimatedTime;
   }
-} 
+}

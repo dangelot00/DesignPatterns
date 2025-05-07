@@ -19,11 +19,11 @@ public class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib {
   // Fake methods to simulate network activity.
 
   private int random(int min, int max) {
-    return min + (int) (Math.random() * ((max - min) + 1));
+    return min + (int) (Math.random() * (max - min + 1));
   }
 
   private void experienceNetworkLatency() {
-    int randomLatency = random(5, 10);
+    final int randomLatency = random(5, 10);
     System.out.println("(Simulating network latency of " + randomLatency * 100 + "ms)");
     for (int i = 0; i < randomLatency; i++) {
       try {
@@ -44,7 +44,7 @@ public class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib {
   private HashMap<String, Video> getRandomVideos() {
     System.out.print("Downloading popular videos list... ");
     experienceNetworkLatency();
-    HashMap<String, Video> hmap = new HashMap<>();
+    final HashMap<String, Video> hmap = new HashMap<>();
     hmap.put("catzzzzzzzzz", new Video("sadgahasgdas", "Catzzzz.avi"));
     hmap.put("mkafksangasj", new Video("mkafksangasj", "Dog play with ball.mp4"));
     hmap.put("dancesvideoo", new Video("asdfas3ffasd", "Dancing video.mpq"));
@@ -57,7 +57,7 @@ public class ThirdPartyYouTubeClass implements ThirdPartyYouTubeLib {
   private Video getSomeVideo(String videoId) {
     System.out.print("Downloading video details for " + videoId + "... ");
     experienceNetworkLatency();
-    HashMap<String, Video> popular = getRandomVideos();
+    final HashMap<String, Video> popular = getRandomVideos();
     Video video = popular.get(videoId);
     if (video == null) {
       video = new Video(videoId, "Video Title for " + videoId);

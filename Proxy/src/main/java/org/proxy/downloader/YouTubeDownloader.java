@@ -6,14 +6,15 @@ import org.proxy.lib.Video;
 import java.util.HashMap;
 
 public class YouTubeDownloader {
-  private ThirdPartyYouTubeLib api;
+  private final ThirdPartyYouTubeLib api;
 
   public YouTubeDownloader(ThirdPartyYouTubeLib api) {
+    super();
     this.api = api;
   }
 
   public void renderVideoPage(String videoId) {
-    Video video = api.getVideo(videoId);
+    final Video video = api.getVideo(videoId);
     if (video == null) {
       System.out.println("\n-------------------------------");
       System.out.println("Error: Video not found for ID: " + videoId);
@@ -29,7 +30,7 @@ public class YouTubeDownloader {
   }
 
   public void renderPopularVideos() {
-    HashMap<String, Video> list = api.popularVideos();
+    final HashMap<String, Video> list = api.popularVideos();
     System.out.println("\n-------------------------------");
     System.out.println("Most popular videos on YouTube (imagine fancy HTML)");
     if (list == null || list.isEmpty()) {
