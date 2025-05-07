@@ -25,7 +25,7 @@ The Abstract Factory pattern solves this by introducing layers of abstraction:
 4.  **Concrete Factory Classes:** Implement the Abstract Factory interface for each product family (e.g., `WindowsFactory`, `MacOSFactory`). Each concrete factory implements the creation methods to instantiate and return the corresponding *Concrete Products* for that family (e.g., `WindowsFactory.createButton()` returns a `WindowsButton`).
 5.  **Client:** The client code works only with the Abstract Factory and Abstract Product interfaces. It receives a concrete factory object at runtime (often via dependency injection or configuration) but doesn't know its specific type. When the client needs a product, it calls the appropriate creation method on the factory interface. This ensures that the client gets products from the *same family* without being coupled to concrete classes.
 
-## 4. Code Analysis (Based on Refactoring.Guru Example)
+## 4. Code Analysis
 
 ### Components:
 
@@ -50,7 +50,7 @@ The Abstract Factory pattern solves this by introducing layers of abstraction:
 ## 5. Class Diagram (Mermaid)
 
 ```mermaid
-%% Abstract Factory Pattern - GUI Example (Improved Readability)
+%% Abstract Factory Pattern - GUI Example
 
 classDiagram
     direction LR %% Left-to-Right flow: Client -> Factory -> Products
