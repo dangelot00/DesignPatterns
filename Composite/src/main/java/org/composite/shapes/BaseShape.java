@@ -1,6 +1,9 @@
 package org.composite.shapes;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 abstract class BaseShape implements Shape {
     public int x;
@@ -9,9 +12,10 @@ abstract class BaseShape implements Shape {
     private boolean selected = false;
 
     BaseShape(int x, int y, Color color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
+      super();
+      this.x = x;
+      this.y = y;
+      this.color = color;
     }
 
     @Override
@@ -63,8 +67,8 @@ abstract class BaseShape implements Shape {
 
     void enableSelectionStyle(Graphics graphics) {
         graphics.setColor(Color.LIGHT_GRAY);
-        Graphics2D g2 = (Graphics2D) graphics;
-        float[] dash1 = {2.0f};
+        final Graphics2D g2 = (Graphics2D) graphics;
+        final float[] dash1 = {2.0f};
         g2.setStroke(new BasicStroke(1.0f,
                 BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER,
@@ -73,7 +77,7 @@ abstract class BaseShape implements Shape {
 
     void disableSelectionStyle(Graphics graphics) {
         graphics.setColor(color);
-        Graphics2D g2 = (Graphics2D) graphics;
+        final Graphics2D g2 = (Graphics2D) graphics;
         g2.setStroke(new BasicStroke());
     }
 

@@ -1,6 +1,7 @@
 package org.composite.shapes;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -67,9 +68,9 @@ public class CompoundShape extends BaseShape {
             return 0;
         }
         int maxX = 0;
-        int minX = getX();
+        final int minX = getX();
         for (Shape child : children) {
-            int childRightExtent = (child.getX() - minX) + child.getWidth();
+            final int childRightExtent = child.getX() - minX + child.getWidth();
             if (childRightExtent > maxX) {
                 maxX = childRightExtent;
             }
@@ -83,9 +84,9 @@ public class CompoundShape extends BaseShape {
             return 0;
         }
         int maxY = 0;
-        int minY = getY();
+        final int minY = getY();
         for (Shape child : children) {
-            int childBottomExtent = (child.getY() - minY) + child.getHeight();
+            final int childBottomExtent = child.getY() - minY + child.getHeight();
             if (childBottomExtent > maxY) {
                 maxY = childBottomExtent;
             }

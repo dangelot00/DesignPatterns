@@ -1,6 +1,7 @@
 package org.composite.shapes;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
 public class Rectangle extends BaseShape {
     public int width;

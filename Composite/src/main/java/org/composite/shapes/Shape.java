@@ -1,6 +1,6 @@
 package org.composite.shapes;
 
-import java.awt.*;
+import java.awt.Graphics;
 
 public interface Shape {
     int getX();

@@ -3,18 +3,27 @@ package org.composite.editor;
 import org.composite.shapes.CompoundShape;
 import org.composite.shapes.Shape;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class ImageEditor {
-    private EditorCanvas canvas;
-    private CompoundShape allShapes = new CompoundShape();
+    private final EditorCanvas canvas;
+    private final CompoundShape allShapes = new CompoundShape();
 
     public ImageEditor() {
-        canvas = new EditorCanvas();
+      super();
+      canvas = new EditorCanvas();
     }
 
     public void loadShapes(Shape... shapes) {
@@ -29,20 +38,21 @@ public class ImageEditor {
         private static final int PADDING = 10;
 
         EditorCanvas() {
-            createFrame();
-            refresh();
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    allShapes.unSelect();
-                    boolean childSelected = allShapes.selectChildAt(e.getX(), e.getY());
-                    
-                    if (!childSelected && allShapes.isInsideBounds(e.getX(), e.getY())) {
-                        allShapes.select();
-                    }
-                    e.getComponent().repaint();
-                }
-            });
+          super();
+          createFrame();
+          refresh();
+          addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+              allShapes.unSelect();
+              final boolean childSelected = allShapes.selectChildAt(e.getX(), e.getY());
+
+              if (!childSelected && allShapes.isInsideBounds(e.getX(), e.getY())) {
+                allShapes.select();
+              }
+              e.getComponent().repaint();
+            }
+          });
         }
 
         void createFrame() {

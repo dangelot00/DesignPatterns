@@ -1,4 +1,4 @@
-package org.composite.demo;
+package org.composite;
 
 import org.composite.editor.ImageEditor;
 import org.composite.shapes.Circle;
@@ -6,11 +6,15 @@ import org.composite.shapes.CompoundShape;
 import org.composite.shapes.Dot;
 import org.composite.shapes.Rectangle;
 
-import java.awt.*;
+import java.awt.Color;
 
-public class Demo {
-    public static void main(String[] args) {
-        ImageEditor editor = new ImageEditor();
+public final class Demo {
+  private Demo() {
+    super();
+  }
+
+  public static void main(String[] args) {
+        final ImageEditor editor = new ImageEditor();
 
         editor.loadShapes(
                 new Circle(10, 10, 10, Color.BLUE),
