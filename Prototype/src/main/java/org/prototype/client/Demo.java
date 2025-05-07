@@ -7,30 +7,34 @@ import org.prototype.shapes.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Demo {
-    public static void main(String[] args) {
-        List<Shape> shapes = new ArrayList<>();
-        List<Shape> shapesCopy = new ArrayList<>();
+public final class Demo {
+  private Demo() {
+    super();
+  }
 
-        Circle circle = new Circle();
-        circle.x = 10;
-        circle.y = 20;
-        circle.radius = 15;
-        circle.color = "red";
-        shapes.add(circle);
+  public static void main(String[] args) {
+      final List<Shape> shapes = new ArrayList<>();
+      final List<Shape> shapesCopy = new ArrayList<>();
 
-        Circle anotherCircle = (Circle) circle.clone();
-        shapes.add(anotherCircle);
+      final Circle circle = new Circle();
+      circle.x = 10;
+      circle.y = 20;
+      circle.radius = 15;
+      circle.color = "red";
+      shapes.add(circle);
 
-        Rectangle rectangle = new Rectangle();
-        rectangle.width = 10;
-        rectangle.height = 20;
-        rectangle.x = 30;
-        rectangle.y = 40;
-        rectangle.color = "blue";
-        shapes.add(rectangle);
+      final Circle anotherCircle = (Circle) circle.clone();
+      shapes.add(anotherCircle);
 
-        cloneAndCompare(shapes, shapesCopy);
+      final Rectangle rectangle = new Rectangle();
+      rectangle.width = 10;
+      rectangle.height = 20;
+      rectangle.x = 30;
+      rectangle.y = 40;
+      rectangle.color = "blue";
+      shapes.add(rectangle);
+
+      cloneAndCompare(shapes, shapesCopy);
     }
 
     private static void cloneAndCompare(List<Shape> shapes, List<Shape> shapesCopy) {

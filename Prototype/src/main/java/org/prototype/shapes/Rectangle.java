@@ -5,14 +5,15 @@ public class Rectangle extends Shape {
     public int height;
 
     public Rectangle() {
+      super();
     }
 
     public Rectangle(Rectangle target) {
-        super(target);
-        if (target != null) {
-            this.width = target.width;
-            this.height = target.height;
-        }
+      super(target);
+      if (target != null) {
+          this.width = target.width;
+          this.height = target.height;
+      }
     }
 
     @Override
@@ -22,8 +23,7 @@ public class Rectangle extends Shape {
 
     @Override
     public boolean equals(Object object2) {
-        if (!(object2 instanceof Rectangle) || !super.equals(object2)) return false;
-        Rectangle shape2 = (Rectangle) object2;
-        return shape2.width == width && shape2.height == height;
+      if (!(object2 instanceof final Rectangle shape2) || !super.equals(object2)) return false;
+      return shape2.width == width && shape2.height == height;
     }
 } 

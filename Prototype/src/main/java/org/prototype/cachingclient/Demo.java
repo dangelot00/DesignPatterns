@@ -3,13 +3,17 @@ package org.prototype.cachingclient;
 import org.prototype.cache.BundledShapeCache;
 import org.prototype.shapes.Shape;
 
-public class Demo {
-    public static void main(String[] args) {
-        BundledShapeCache cache = new BundledShapeCache();
+public final class Demo {
+  private Demo() {
+    super();
+  }
 
-        Shape shape1 = cache.get("Big green circle");
-        Shape shape2 = cache.get("Medium blue rectangle");
-        Shape shape3 = cache.get("Medium blue rectangle");
+  public static void main(String[] args) {
+        final BundledShapeCache cache = new BundledShapeCache();
+
+        final Shape shape1 = cache.get("Big green circle");
+        final Shape shape2 = cache.get("Medium blue rectangle");
+        final Shape shape3 = cache.get("Medium blue rectangle");
 
         System.out.println("Shape 1: " + shape1 + (shape1 != null ? " Color: " + shape1.color : ""));
         System.out.println("Shape 2: " + shape2 + (shape2 != null ? " Color: " + shape2.color : ""));

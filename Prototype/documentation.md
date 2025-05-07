@@ -1,71 +1,154 @@
-# Prototype Design Pattern
+# Prototype Pattern - Java Example
 
-## 1. Intent
+## 1. Introduction
 
-Prototype is a creational design pattern that lets you copy existing objects without making your code dependent on their classes. It allows cloning objects, even complex ones, without coupling to their specific classes.
+This document analyzes the Java implementation of the Prototype design pattern provided by Refactoring.Guru. The Prototype pattern is a creational design pattern that lets you create new objects by copying an existing object, known as a prototype, rather than creating objects from scratch using a constructor. This is particularly useful when the cost of creating an object is more expensive or complex than copying an existing one.
+
+The example demonstrates creating various `Shape` objects (like `Circle`, `Rectangle`) by cloning pre-configured prototype instances stored in a cache.
 
 ## 2. Problem
 
-Creating an exact copy of an object by instantiating a new object of the same class and then copying all field values has limitations:
+Imagine you need to create many instances of objects that are very similar or have a complex and costly initialization process. For example, loading configuration from a file, making network requests, or performing extensive computations to set up an object's initial state.
 
-1.  **Private Fields**: Some fields may be private and inaccessible from outside the object.
-2.  **Class Dependency**: Requires knowing the object's concrete class, leading to dependencies. This is problematic if you only know the interface an object implements, not its concrete class.
+Consider these scenarios:
+*   **Expensive Initialization:** If creating an object (`new MyComplexObject()`) involves significant overhead, instantiating many such objects becomes inefficient.
+*   **Numerous Variations:** You might have many variations of an object (e.g., different shapes with specific colors, positions, and sizes) that are largely similar. Re-creating each from scratch with all its specific parameters can be verbose.
+*   **Dynamic Configuration:** Sometimes, the exact type of object to create is determined at runtime, and you want to avoid a complex series of `if/else` or `switch` statements to instantiate the correct class.
 
-## 3. Solution
+A naive approach of always using constructors for new objects can lead to:
+*   **Performance Issues:** Repeatedly incurring high initialization costs.
+*   **Code Duplication:** If similar objects are created, the setup logic might be duplicated.
+*   **Tight Coupling:** The client code becomes tightly coupled to the concrete classes it needs to instantiate.
 
-The Prototype pattern delegates the cloning process to the objects being cloned. It declares a common interface (or abstract class) for all objects that support cloning, typically with a single `clone()` method.
+## 3. Solution: Prototype
 
-The `clone()` method implementation in each class creates a new object of the current class and copies all field values (including private ones, as objects of the same class can access each other's private fields) from the original object to the new one.
+The Prototype pattern solves this by creating new objects through cloning existing "prototype" instances:
 
-An object that supports cloning is called a *prototype*. When objects have many fields or configurations, cloning pre-configured prototypes can be an alternative to subclassing or manual construction.
+1.  **Prototype Interface (or Abstract Class):** Declares a cloning method (e.g., `clone()`). All objects that can be used as prototypes must implement this interface.
+2.  **Concrete Prototype Classes:** Implement the Prototype interface. Each concrete prototype is responsible for creating a copy of itself. The cloning can be either a shallow copy or a deep copy, depending on the requirements.
+3.  **Client:** Instead of instantiating objects directly using `new`, the client asks a prototype object to clone itself.
+4.  **(Optional) Prototype Registry/Cache:** A mechanism to store and manage pre-configured prototype instances. The client can request a clone of a prototype from the registry, often using a key or identifier. This decouples the client from knowing the concrete prototype classes directly.
 
-## 4. Structure
+When a new object is needed, the client finds a suitable prototype and calls its `clone()` method. The prototype returns a new object that is a copy of itself.
 
-**Basic Implementation:**
+## 4. Code Analysis
 
-1.  **Prototype (Interface/Abstract Class)**: Declares the cloning method (e.g., `clone()`).
-2.  **Concrete Prototype**: Implements the cloning method. It copies its data to the clone and may handle edge cases like cloning linked objects or resolving recursive dependencies.
-3.  **Client**: Can produce a copy of any object that implements the Prototype interface, without needing to know its concrete class.
+### Components:
 
-**Prototype Registry (Optional):**
+*   **Prototype (Abstract Class in this example):**
+    *   `shapes/Shape.java`: An abstract class that defines common properties (like `x`, `y`, `color`) and an abstract `clone()` method. All concrete shapes that can be cloned must extend this class and implement `clone()`.
+*   **Concrete Prototypes:**
+    *   `shapes/Circle.java`: Extends `Shape`. Implements the `clone()` method to create a new `Circle` object by copying the properties from the current `Circle` instance. It uses its own constructor in the `clone` method for a clean copy.
+    *   `shapes/Rectangle.java`: Extends `Shape`. Implements the `clone()` method similarly to `Circle`, creating a new `Rectangle` by copying properties.
+*   **Prototype Registry/Cache:**
+    *   `cache/BundledShapeCache.java`: A class that pre-initializes and stores prototype `Shape` objects (a `Circle` and a `Rectangle`) in a `HashMap`.
+        *   The constructor of `BundledShapeCache` creates instances of `Circle` and `Rectangle`, configures them (sets color, dimensions, etc.), and stores them in the `cache` map using string keys ("Big green circle", "Medium blue rectangle").
+        *   It provides a `put(String key, Shape shape)` method to add new prototypes to the cache.
+        *   It provides a `get(String key)` method that retrieves a prototype by its key and returns a *clone* of that prototype by calling its `clone()` method.
+*   **Client:**
+    *   `Demo.java`: The entry point.
+        1.  It creates an instance of `BundledShapeCache`.
+        2.  It then requests shapes from the cache using keys (e.g., `cache.get("Big green circle")`).
+        3.  The cache returns *clones* of the stored prototypes.
+        4.  The `Demo` can then use these cloned shapes, potentially modifying them further without affecting the original prototypes in the cache. It also demonstrates that modifying a clone does not affect other clones or the original prototype.
 
-1.  **Prototype Registry**: Provides a way to access frequently-used, pre-built prototype objects ready to be copied. Often implemented as a map from a name/key to a prototype object.
+## 5. Class Diagram (Mermaid)
 
-## 5. Applicability
+```mermaid
+%% Prototype Pattern - Shapes Example
 
-Use the Prototype pattern when:
+classDiagram
+    direction LR
 
-*   Your code shouldn't depend on the concrete classes of objects you need to copy (e.g., when working with objects from third-party code via an interface).
-*   You want to reduce the number of subclasses that differ only in their initialization. Instead of many subclasses, you can have a few prototypes configured in various ways and clone them.
+    %% -- Client --
+    class Demo {
+        +main() void
+    }
 
-## 6. How to Implement
+    %% -- Prototype Registry --
+    class BundledShapeCache {
+        -cache Map<String, Shape>
+        +BundledShapeCache()
+        +put(String key, Shape shape) : Shape
+        +get(String key) : Shape %% Method returns a clone
+    }
 
-1.  Create the Prototype interface/abstract class with a `clone()` method. Or, add `clone()` to an existing class hierarchy.
-2.  Each Concrete Prototype class must implement the `clone()` method. Typically, this involves:
-    *   Defining a copy constructor (a constructor that takes an object of the same class as an argument) to copy all fields (including those inherited from parent classes by calling `super(source)`).
-    *   The `clone()` method then calls this copy constructor: `return new ConcretePrototype(this);`.
-3.  (Optional) Create a Prototype Registry (e.g., a class with a map) to store and manage pre-configured prototype instances. The client requests a clone from the registry by some identifier.
+    %% -- Prototype (Abstract Class) --
+    class Shape {
+        <<Abstract>>
+        -x int
+        -y int
+        -color String
+        +Shape()
+        +Shape(Shape target) %% Copy constructor
+        +clone()* Shape      %% Abstract clone method
+    }
 
-## 7. Pros and Cons
+    %% -- Concrete Prototypes --
+    class Circle {
+        -radius int
+        +Circle()
+        +Circle(Circle target) %% Copy constructor
+        +clone() Shape
+    }
+    class Rectangle {
+        -width int
+        -height int
+        +Rectangle()
+        +Rectangle(Rectangle target) %% Copy constructor
+        +clone() Shape
+    }
 
-**Pros:**
+    %% -- Relationships --
 
-*   Clone objects without coupling to their concrete classes.
-*   Avoid repeated initialization code by cloning pre-built prototypes.
-*   Conveniently produce complex objects.
-*   An alternative to inheritance for configuring complex objects.
+    %% Client uses the Registry
+    Demo ..> BundledShapeCache : uses
 
-**Cons:**
+    %% Registry manages Prototypes
+    BundledShapeCache o-- Shape : "stores (prototypes)"
 
-*   Cloning complex objects with circular references or deep-copying requirements can be tricky.
-    *   Java's `Cloneable` interface and `Object.clone()` provide a shallow copy by default. Deep copy needs to be implemented manually if required.
+    %% Registry returns cloned Shapes
+    BundledShapeCache ..> Shape : "creates (via clone)"
 
-## 8. Relations with Other Patterns
+    %% Prototype Hierarchy
+    Shape <|-- Circle : extends
+    Shape <|-- Rectangle : extends
+```
 
-*   Designs may start with **Factory Method** and evolve to **Abstract Factory**, **Prototype**, or **Builder**.
-*   **Abstract Factory** classes can be based on Factory Methods or use **Prototype** to compose methods.
-*   **Prototype** can be useful for saving copies of **Command** objects in history.
-*   Heavy use of **Composite** and **Decorator** can benefit from **Prototype** for cloning complex structures.
-*   **Prototype** avoids inheritance drawbacks but requires careful (potentially complex) clone initialization. **Factory Method** relies on inheritance.
-*   Can be a simpler alternative to **Memento** if the object's state is straightforward and has no complex external resource links.
-*   **Abstract Factories**, **Builders**, and **Prototypes** can all be implemented as **Singletons**. 
+## 6. How it Works (Interaction Flow)
+
+1.  **Initialization & Prototyping (`BundledShapeCache` constructor in `Demo.java`)**:
+    *   Instances of `ConcretePrototype` classes (`Circle`, `Rectangle`) are created.
+    *   These instances are configured with specific initial states (e.g., `bigGreenCircle.color = "Green"`, `mediumBlueRectangle.width = 20`).
+    *   These configured objects (prototypes) are stored in the `BundledShapeCache` (the registry) with unique keys.
+2.  **Client Request (`Demo.java`)**:
+    *   The client (`Demo`) needs a new shape object. Instead of using `new Circle()` or `new Rectangle()`, it requests an object from the `BundledShapeCache` by its key: `Shape shape1 = cache.get("Big green circle");`.
+3.  **Retrieval and Cloning (`BundledShapeCache.get()`)**:
+    *   The `BundledShapeCache` retrieves the prototype `Shape` object associated with the given key from its internal `HashMap`.
+    *   It then calls the `clone()` method on this retrieved prototype: `return cache.get(key).clone();`.
+4.  **Concrete Prototype Cloning (`Circle.clone()` or `Rectangle.clone()`)**:
+    *   The `clone()` method in the concrete prototype (e.g., `Circle`) creates a new instance of itself.
+    *   It copies the state (attributes like `x`, `y`, `color`, `radius`) from the prototype instance to the new instance. In this example, this is typically done by calling a copy constructor: `new Circle(this)`.
+5.  **Return Cloned Object**:
+    *   The newly created and initialized clone is returned by `BundledShapeCache.get()` to the client (`Demo`).
+    *   The client now has a new `Shape` object that is a copy of the requested prototype. It can be used independently and modified without affecting the original prototype stored in the cache or other clones. For instance, `clonedShape.x = 10;` will not change `originalPrototype.x`.
+
+## 7. Benefits
+
+*   **Reduces Subclassing:** Avoids the need for a complex hierarchy of creator classes (as seen in Abstract Factory or Factory Method).
+*   **Hides Concrete Classes from Client:** The client can work with objects through the prototype interface without knowing their concrete types, especially when using a registry.
+*   **Performance Improvement:** Cloning can be faster than creating objects from scratch if the initialization process is complex or resource-intensive. Once a prototype is built, subsequent objects are created by copying.
+*   **Dynamic Configuration:** New concrete prototypes can be added to a registry at runtime.
+*   **Convenience:** Easily create objects with pre-set configurations.
+
+## 8. Drawbacks
+
+*   **Complexity of Cloning:** Cloning complex objects with circular references or many nested objects can be difficult. One must decide between shallow and deep copy.
+    *   **Shallow Copy:** Copies only the top-level object, and references to other objects are shared. Modifying a referenced object in a clone can affect the original prototype if not handled carefully.
+    *   **Deep Copy:** Copies the object and all objects it references recursively. This ensures full independence but can be more complex and slower to implement. (The Refactoring.Guru example uses copy constructors which generally facilitate a deep copy of primitive and String fields, but care is needed for mutable object fields).
+*   **Implementation Overhead:** Every concrete prototype class must implement the `clone()` method. If using Java's built-in `Cloneable` interface and `Object.clone()`, there are specific rules and potential pitfalls (e.g., `CloneNotSupportedException`, default shallow copy). The example avoids `Cloneable` and uses explicit copy constructors in `clone()` methods, which is often a cleaner approach in Java.
+*   **Configuration of Clones:** While the prototype provides an initial state, clones might still need further configuration after creation, which can sometimes negate the simplicity.
+
+## 9. Conclusion
+
+The Prototype pattern, as demonstrated by the Refactoring.Guru example, offers an effective way to create objects by copying existing instances. It is particularly advantageous when object creation is costly, when there are many similar objects with slight variations, or when the system needs to be flexible in how objects are created and configured. By using a registry of prototypes, it also allows for decoupling the client from concrete class instantiations. Careful consideration of shallow versus deep copying is crucial when implementing the `clone` operation for complex objects.
