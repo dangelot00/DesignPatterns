@@ -1,16 +1,20 @@
-package org.decorator.client;
+package org.decorator;
 
 import org.decorator.decorators.CompressionDecorator;
 import org.decorator.decorators.DataSource;
 import org.decorator.decorators.EncryptionDecorator;
 import org.decorator.decorators.FileDataSource;
 
-public class Demo {
-    public static void main(String[] args) {
-        String salaryRecords = "Name,Salary\nJohn Smith,100000\nSteven Jobs,912000";
-        String outputFilePath = ".\\Decorator\\OutputDemo.txt";
+public final class Demo {
+  private Demo() {
+    super();
+  }
 
-        DataSource plainSource = new FileDataSource(outputFilePath);
+  public static void main(String[] args) {
+        final String salaryRecords = "Name,Salary\nJohn Smith,100000\nSteven Jobs,912000";
+        final String outputFilePath = ".\\Decorator\\OutputDemo.txt";
+
+        final DataSource plainSource = new FileDataSource(outputFilePath);
         System.out.println("--- Writing plain data to " + outputFilePath + " ---");
         plainSource.writeData(salaryRecords);
         System.out.println("Plain data written.");
@@ -18,7 +22,7 @@ public class Demo {
         System.out.println(plainSource.readData());
         System.out.println("----------------------------------------\n");
 
-        DataSource encryptedSource = new EncryptionDecorator(new FileDataSource(outputFilePath));
+        final DataSource encryptedSource = new EncryptionDecorator(new FileDataSource(outputFilePath));
         System.out.println("--- Writing encrypted data to " + outputFilePath + " ---");
         encryptedSource.writeData(salaryRecords);
         System.out.println("Encrypted data written.");
@@ -28,7 +32,7 @@ public class Demo {
         System.out.println(encryptedSource.readData());
         System.out.println("----------------------------------------\n");
 
-        DataSource compressedSource = new CompressionDecorator(new FileDataSource(outputFilePath));
+        final DataSource compressedSource = new CompressionDecorator(new FileDataSource(outputFilePath));
         System.out.println("--- Writing compressed data to " + outputFilePath + " ---");
         compressedSource.writeData(salaryRecords);
         System.out.println("Compressed data written.");
@@ -38,7 +42,7 @@ public class Demo {
         System.out.println(compressedSource.readData());
         System.out.println("----------------------------------------\n");
 
-        DataSource compressedAndEncryptedSource = new EncryptionDecorator(
+        final DataSource compressedAndEncryptedSource = new EncryptionDecorator(
                                                     new CompressionDecorator(
                                                         new FileDataSource(outputFilePath)));
         System.out.println("--- Writing compressed then encrypted data to " + outputFilePath + " ---");
@@ -50,7 +54,7 @@ public class Demo {
         System.out.println(compressedAndEncryptedSource.readData());
         System.out.println("----------------------------------------\n");
 
-        DataSource encryptedAndCompressedSource = new CompressionDecorator(
+        final DataSource encryptedAndCompressedSource = new CompressionDecorator(
                                                     new EncryptionDecorator(
                                                         new FileDataSource(outputFilePath)));
         System.out.println("--- Writing encrypted then compressed data to " + outputFilePath + " ---");

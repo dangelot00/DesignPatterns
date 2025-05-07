@@ -1,19 +1,20 @@
 package org.decorator.decorators;
 
 public abstract class DataSourceDecorator implements DataSource {
-    private DataSource wrappee;
+    private final DataSource wrapper;
 
     DataSourceDecorator(DataSource source) {
-        this.wrappee = source;
+      super();
+      this.wrapper = source;
     }
 
     @Override
     public void writeData(String data) {
-        wrappee.writeData(data);
+        wrapper.writeData(data);
     }
 
     @Override
     public String readData() {
-        return wrappee.readData();
+        return wrapper.readData();
     }
 } 

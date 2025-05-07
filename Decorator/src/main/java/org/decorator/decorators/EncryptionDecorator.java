@@ -22,8 +22,8 @@ public class EncryptionDecorator extends DataSourceDecorator {
         if (data == null || data.isEmpty()) {
             return "";
         }
-        byte[] result = data.getBytes();
-        byte key = (byte) 0xAB;
+        final byte[] result = data.getBytes();
+        final byte key = (byte) 0xAB;
         for (int i = 0; i < result.length; i++) {
             result[i] = (byte) (result[i] ^ key);
         }
@@ -34,7 +34,7 @@ public class EncryptionDecorator extends DataSourceDecorator {
         if (data == null || data.isEmpty()) {
             return "";
         }
-        byte[] result;
+        final byte[] result;
         try {
             result = Base64.getDecoder().decode(data);
         } catch (IllegalArgumentException e) {
@@ -42,7 +42,7 @@ public class EncryptionDecorator extends DataSourceDecorator {
             return "";
         }
         
-        byte key = (byte) 0xAB;
+        final byte key = (byte) 0xAB;
         for (int i = 0; i < result.length; i++) {
             result[i] = (byte) (result[i] ^ key);
         }

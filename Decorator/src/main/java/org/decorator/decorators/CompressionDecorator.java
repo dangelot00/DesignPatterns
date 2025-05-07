@@ -45,10 +45,10 @@ public class CompressionDecorator extends DataSourceDecorator {
         if (stringData == null || stringData.isEmpty()) {
             return "";
         }
-        byte[] data = stringData.getBytes();
+        final byte[] data = stringData.getBytes();
         try {
-            ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
-            DeflaterOutputStream dos = new DeflaterOutputStream(bout, new Deflater(compLevel));
+            final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
+            final DeflaterOutputStream dos = new DeflaterOutputStream(bout, new Deflater(compLevel));
             dos.write(data);
             dos.close();
             return Base64.getEncoder().encodeToString(bout.toByteArray());
@@ -71,16 +71,16 @@ public class CompressionDecorator extends DataSourceDecorator {
         }
         
         try {
-            InputStream in = new ByteArrayInputStream(data);
-            InflaterInputStream iin = new InflaterInputStream(in);
-            ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
+            final InputStream in = new ByteArrayInputStream(data);
+            final InflaterInputStream iin = new InflaterInputStream(in);
+            final ByteArrayOutputStream bout = new ByteArrayOutputStream(512);
             int b;
             while ((b = iin.read()) != -1) {
                 bout.write(b);
             }
             iin.close();
             in.close(); 
-            return new String(bout.toByteArray());
+            return bout.toString();
         } catch (IOException ex) {
             System.out.println("Error during decompression: " + ex.getMessage());
             return "";

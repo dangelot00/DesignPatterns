@@ -11,8 +11,8 @@ public class FileDataSource implements DataSource {
 
     @Override
     public void writeData(String data) {
-        File file = new File(name);
-        File parentDir = file.getParentFile();
+        final File file = new File(name);
+        final File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
             if (!parentDir.mkdirs()) {
                 System.out.println("Error: Could not create directory " + parentDir);
@@ -29,7 +29,7 @@ public class FileDataSource implements DataSource {
     @Override
     public String readData() {
         char[] buffer = null;
-        File file = new File(name);
+        final File file = new File(name);
         if (!file.exists()) {
             System.out.println("Error: File not found " + name);
             return "";
