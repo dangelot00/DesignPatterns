@@ -7,6 +7,11 @@
         <option value="$PROJECT_DIR$/Singleton/pom.xml" />
         <option value="$PROJECT_DIR$/AbstractFactory/pom.xml" />
         <option value="$PROJECT_DIR$/Builder/pom.xml" />
+        <option value="$PROJECT_DIR$/Composite/pom.xml" />
+        <option value="$PROJECT_DIR$/FactoryMethod/pom.xml" />
+        <option value="$PROJECT_DIR$/Prototype/pom.xml" />
+        <option value="$PROJECT_DIR$/Decorator/pom.xml" />
+        <option value="$PROJECT_DIR$/Proxy/pom.xml" />
       </list>
     </option>
   </component>
